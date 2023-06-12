@@ -1,0 +1,23 @@
+
+APP=com.mm.droid.livetv.btvapp
+VERSAO1=$(dumpsys package $APP | grep -i versionName=1.| wc -l)
+
+pm grant $APP android.permission.WRITE_EXTERNAL_STORAGE
+rm -rf /data/data/$APP/files/*
+rm -rf /data/local/btvnupd
+
+if [ $VERSAO1 -eq 1 ]; then
+iptables -A OUTPUT -p tcp --dport 80 -j DROP
+else
+while sleep 1
+do
+VER_ABERTO=$(dumpsys activity activities | grep mResumedActivity | cut -d "{" -f2 | cut -d " " -f3 | cut -d "/" -f1 | grep -i $APP| wc -l)
+if [ $VER_ABERTO -eq 1 ]; then
+rm -rf /data/data/$APP/files/*
+continue
+else
+break
+fi
+continue
+done
+fi
