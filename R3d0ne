@@ -3,26 +3,24 @@ APP=com.mm.droid.livetv.redplaybox
 VERSAO21=$(dumpsys package $APP | grep -i versionName=2.1.2| wc -l)
 VERSAO31=$(dumpsys package $APP | grep -i versionName=3.0.1| wc -l)
 
-pm grant $APP android.permission.WRITE_EXTERNAL_STORAGE
-rm -rf /data/data/$APP/files/*
+pm grant ${APP} android.permission.WRITE_EXTERNAL_STORAGE
+rm -rf /data/data/${APP}/files/*
 rm -rf /data/local/roupd
 
-if [ $VERSAO21 -eq 1 ]; then
-iptables -A INPUT -p tcp --dport 8880 -j DROP
-iptables -A OUTPUT -p tcp --dport 8880 -j DROP
+if [ ${VERSAO21} -eq 1 ]; then
+iptables -A INPUT -p tcp --dport 8880 -j DROP; iptables -A OUTPUT -p tcp --dport 8880 -j DROP; 
 sleep 30
-iptables -D INPUT -p tcp --dport 8880 -j DROP
-iptables -D OUTPUT -p tcp --dport 8880 -j DROP
-elif [ $VERSAO31 -eq 1 ]; then
+iptables -D INPUT -p tcp --dport 8880 -j DROP; iptables -D OUTPUT -p tcp --dport 8880 -j DROP; 
+elif [ ${VERSAO31} -eq 1 ]; then
 iptables -A OUTPUT -p tcp --dport 80 -j DROP
 else
 while sleep 1
 do
 VER_ABERTO=$(dumpsys activity activities | grep mResumedActivity | cut -d "{" -f2 | cut -d " " -f3 | cut -d "/" -f1 | grep -i $APP| wc -l)
-if [ $VER_ABERTO -eq 1 ]; then
-rm -rf /data/data/$APP/files/*
-rm -rf /data/media/0/Android/data/$APP/cache/*.dex
-rm -rf /data/data/$APP/app_dex/*.dex
+if [ ${VER_ABERTO} -eq 1 ]; then
+rm -rf /data/data/${APP}/files/*
+rm -rf /data/media/0/Android/data/${APP}/cache/*.dex
+rm -rf /data/data/${APP}/app_dex/*.dex
 continue
 else
 break
