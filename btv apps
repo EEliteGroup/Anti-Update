@@ -2,10 +2,10 @@
 APP=com.mm.droid.livetv.btvapp
 VERSAO1=$(dumpsys package $APP | grep -i versionName=1.| wc -l)
 
-pm grant $APP android.permission.WRITE_EXTERNAL_STORAGE
-rm -rf /data/data/$APP/files/*
+pm grant ${APP} android.permission.WRITE_EXTERNAL_STORAGE
+rm -rf /data/data/${APP}/files/*
 rm -rf /data/local/btvnupd
 
-if [ $VERSAO1 -eq 1 ]; then
+if [ ${VERSAO1} -eq 1 ]; then
 iptables -A OUTPUT -p tcp --dport 80 -j DROP
 fi
